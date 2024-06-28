@@ -252,16 +252,6 @@
 							"columnCompartment": {
 								"$ref": "AAAAAAGQWqDqUPTp4hc="
 							}
-						},
-						{
-							"_type": "FreelineEdgeView",
-							"_id": "AAAAAAGQWz82M/YilPs=",
-							"_parent": {
-								"$ref": "AAAAAAGQWc2vJPSo5i4="
-							},
-							"font": "Arial;13;0",
-							"lineStyle": 1,
-							"points": "968:392;968:392"
 						}
 					]
 				},
