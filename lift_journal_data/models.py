@@ -6,11 +6,11 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from sqlalchemy import create_engine
 
-db_engine = os.getenv("LIFT_JOURNAL_DB_ENGINE")
-db_username = os.getenv("LIFT_JOURNAL_DB_USERNAME")
-db_password = os.getenv("LIFT_JOURNAL_DB_PASSWORD")
-db_server = os.getenv("LIFT_JOUNRAL_DB_SERVER")
-db_name = os.getenv("LIFT_JOURNAL_DB_NAME")
+db_engine = os.environ["LIFT_JOURNAL_DB_ENGINE"]
+db_username = os.environ["LIFT_JOURNAL_DB_USERNAME"]
+db_password = os.environ["LIFT_JOURNAL_DB_PASSWORD"]
+db_server = os.environ["LIFT_JOUNRAL_DB_SERVER"]
+db_name = os.environ["LIFT_JOURNAL_DB_NAME"]
 db_url = f"{db_engine}://{db_username}:{db_password}@{db_server}/{db_name}"
 
 engine = create_engine(db_url)
