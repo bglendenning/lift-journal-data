@@ -1,2 +1,12 @@
-[build-system]
-requires = ["sqlalchemy", "psycopg2-binary", "pydantic", "email-validator"]
+[project]
+name = "Lift Journal Data"
+requires-python = ">=3.10"
+authors = [
+    {name="Brandan Glendenning", email="brandan@glendigi.com"}
+]
+dependencies = [
+    "sqlalchemy",
+    "psycopg2-binary",
+    "pydantic",
+    "email-validator"
+]
