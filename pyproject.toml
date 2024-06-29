@@ -1,5 +1,5 @@
 [project]
-name = "Lift Journal Data"
+name = "LiftJournalData"
 requires-python = ">=3.10"
 authors = [
     {name="Brandan Glendenning", email="brandan@glendigi.com"}
