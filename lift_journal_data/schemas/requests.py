@@ -3,10 +3,13 @@ from typing_extensions import Self
 from pydantic import BaseModel, EmailStr, field_validator, model_validator, ValidationInfo
 
 
-class UserRegister(BaseModel):
+class UserCreate(BaseModel):
     email: EmailStr
     password1: str
     password2: str
+
+    class Config:
+        orm_mode = True
 
     @field_validator("password1", "password2")
     @classmethod

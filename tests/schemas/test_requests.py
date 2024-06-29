@@ -5,13 +5,13 @@ from pydantic_core import ValidationError
 from lift_journal_data.schemas import requests
 
 
-class TestUserRegister(unittest.TestCase):
+class TestUserCreate(unittest.TestCase):
     email = "email@domain.tld"
 
     def test_valid(self):
-        """UserRegister is valid."""
+        """UserCreate is valid."""
 
-        user_register = requests.UserRegister(
+        user_register = requests.UserCreate(
             email=self.email,
             password1="password",
             password2="password",
@@ -21,10 +21,10 @@ class TestUserRegister(unittest.TestCase):
         self.assertEqual(user_register.password2, "password")
 
     def test_email_invalid(self):
-        """UserRegister.email is invalid."""
+        """UserCreate.email is invalid."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserRegister(
+            user_register = requests.UserCreate(
                 email="email",
                 password1="password",
                 password2="password",
@@ -32,10 +32,10 @@ class TestUserRegister(unittest.TestCase):
         self.assertIn("email", str(context.exception))
 
     def test_password_invalid(self):
-        """UserRegister.password1 or password2 are invalid."""
+        """UserCreate.password1 or password2 are invalid."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserRegister(
+            user_register = requests.UserCreate(
                 email=self.email,
                 password1="",
                 password2="password",
@@ -43,10 +43,10 @@ class TestUserRegister(unittest.TestCase):
         self.assertIn("password1", str(context.exception))
 
     def test_passwords_do_not_match(self):
-        """UserRegister.password1 and password2 do not match."""
+        """UserCreate.password1 and password2 do not match."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserRegister(
+            user_register = requests.UserCreate(
                 email=self.email,
                 password1="password1",
                 password2="password2",
