@@ -18,3 +18,7 @@ class TestUserCrud(unittest.TestCase):
         )
         db_user = crud.create_user(user)
         self.assertEqual(db_user.email, self.email)
+
+        # User exists for provided email
+        db_user = crud.create_user(user)
+        self.assertIs(db_user, None)
