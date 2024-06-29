@@ -1,7 +1,7 @@
 import unittest
 
 from lift_journal_data import crud, models
-from lift_journal_data.schemas import requests
+from lift_journal_data.schemas.user import UserCreate
 
 
 class TestUserCrud(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestUserCrud(unittest.TestCase):
 
     def test_create_user(self):
         with models.SessionLocal() as self.session:
-            user = requests.UserCreate(
+            user = UserCreate(
                 email=self.email,
                 password1="password",
                 password2="password",
@@ -26,7 +26,7 @@ class TestUserCrud(unittest.TestCase):
 
     def test_create_user_with_existing_email(self):
         with models.SessionLocal() as self.session:
-            user = requests.UserCreate(
+            user = UserCreate(
                 email=self.email,
                 password1="password",
                 password2="password",

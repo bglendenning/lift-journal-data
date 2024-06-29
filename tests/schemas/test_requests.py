@@ -2,7 +2,7 @@ import unittest
 
 from pydantic_core import ValidationError
 
-from lift_journal_data.schemas import requests
+from lift_journal_data.schemas.user import UserCreate
 
 
 class TestUserCreate(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestUserCreate(unittest.TestCase):
     def test_valid(self):
         """UserCreate is valid."""
 
-        user_register = requests.UserCreate(
+        user_register = UserCreate(
             email=self.email,
             password1="password",
             password2="password",
@@ -24,7 +24,7 @@ class TestUserCreate(unittest.TestCase):
         """UserCreate.email is invalid."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserCreate(
+            user_register = UserCreate(
                 email="email",
                 password1="password",
                 password2="password",
@@ -35,7 +35,7 @@ class TestUserCreate(unittest.TestCase):
         """UserCreate.password1 or password2 are invalid."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserCreate(
+            user_register = UserCreate(
                 email=self.email,
                 password1="",
                 password2="password",
@@ -46,7 +46,7 @@ class TestUserCreate(unittest.TestCase):
         """UserCreate.password1 and password2 do not match."""
 
         with self.assertRaises(ValidationError) as context:
-            user_register = requests.UserCreate(
+            user_register = UserCreate(
                 email=self.email,
                 password1="password1",
                 password2="password2",
