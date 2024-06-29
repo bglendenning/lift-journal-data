@@ -1,0 +1,2 @@
+[build-system]
+requires = ["sqlalchemy", "psycopg2-binary", "pydantic", "email-validator"]
