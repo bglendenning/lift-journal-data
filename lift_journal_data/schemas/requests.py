@@ -9,7 +9,7 @@ class UserCreate(BaseModel):
     password2: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
     @field_validator("password1", "password2")
     @classmethod
