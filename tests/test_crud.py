@@ -10,15 +10,29 @@ class TestUserCrud(unittest.TestCase):
     def setUp(self):
         models.create_tables()
 
-    def test_create_user(self):
-        user = requests.UserCreate(
-            email=self.email,
-            password1="password",
-            password2="password",
-        )
-        db_user = crud.create_user(user)
-        self.assertEqual(db_user.email, self.email)
+    def tearDown(self):
+        # Delete in-memory SQLite database
+        models.engine.dispose()
 
-        # User exists for provided email
-        db_user = crud.create_user(user)
-        self.assertIs(db_user, None)
+    def test_create_user(self):
+        with models.SessionLocal() as self.session:
+            user = requests.UserCreate(
+                email=self.email,
+                password1="password",
+                password2="password",
+            )
+            db_user = crud.create_user(self.session, user)
+            self.assertEqual(db_user.email, self.email)
+
+    def test_create_user_with_existing_email(self):
+        with models.SessionLocal() as self.session:
+            user = requests.UserCreate(
+                email=self.email,
+                password1="password",
+                password2="password",
+            )
+            crud.create_user(self.session, user)
+
+            # User exists for provided email
+            db_user = crud.create_user(self.session, user)
+            self.assertIs(db_user, None)

@@ -5,18 +5,17 @@ from lift_journal_data import models
 from lift_journal_data.schemas import requests
 
 
-def create_user(user: requests.UserCreate):
-    with Session(models.engine) as session:
-        db_user = models.User(email=user.email, password=user.password1)
-        session.add(db_user)
+def create_user(session: Session, user: requests.UserCreate):
+    db_user = models.User(email=user.email, password=user.password1)
+    session.add(db_user)
 
-        try:
-            session.commit()
-        except IntegrityError:
-            # Attempted to create User with non-unique email
-            session.rollback()
-            db_user = None
-        else:
-            session.refresh(db_user)
+    try:
+        session.commit()
+    except IntegrityError:
+        # Attempted to create User with non-unique email
+        session.rollback()
+        db_user = None
+    else:
+        session.refresh(db_user)
 
     return db_user
