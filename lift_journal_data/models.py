@@ -2,7 +2,6 @@ import argparse
 import os
 
 from sqlalchemy import create_engine, String
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 db_url = os.getenv("LIFT_JOURNAL_DB_URL")
@@ -19,7 +18,8 @@ engine = create_engine(db_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
 class User(Base):
