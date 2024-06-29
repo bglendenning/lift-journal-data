@@ -1,11 +1,19 @@
 import argparse
+import os
 
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from sqlalchemy import create_engine
 
-engine = create_engine("postgresql://lift_journal:lift_journal@localhost/lift_journal")
+db_engine = os.getenv("LIFT_JOURNAL_DB_ENGINE")
+db_username = os.getenv("LIFT_JOURNAL_DB_USERNAME")
+db_password = os.getenv("LIFT_JOURNAL_DB_PASSWORD")
+db_server = os.getenv("LIFT_JOUNRAL_DB_SERVER")
+db_name = os.getenv("LIFT_JOURNAL_DB_NAME")
+db_url = f"{db_engine}://{db_username}:{db_password}@{db_server}/{db_name}"
+
+engine = create_engine(db_url)
 
 
 class Base(DeclarativeBase):
