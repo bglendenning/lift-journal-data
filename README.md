@@ -15,11 +15,11 @@ Having gone through the interview and technical assessment process for multiple 
 
 I received a response from Swappa, and was asked to interview, but no agenda was specified. After my experiences with other companies, I felt that, given the opportunity to express my strengths, I would give a much better impression of what value I can provide. I decided to create a web service using unfamiliar technologies to solve a legitimate problem. I had 7 days to do this, and felt that if I could get it done it would highlight my ability to efficiently and effectively learn, understand, and implement new information.
 
-I created the original _Lift Journal_ project in a monolithic repository using Python, [Flask](https://flask.palletsprojects.com/en/3.0.x/), [Blueprint JS](https://blueprintjs.com/), and [D3](https://d3js.org/). The service handled user registration, issuing Javascript web tokens, allowed users to log their weight lifting sessions, and then to view their progress over time by rendering timeseries plots of weight lifting records. The work helped me to land my first full-time web developer position.
+I created the original _Lift Journal_ project in a monolithic repository using Python, [Flask](https://flask.palletsprojects.com/en/3.0.x/), [Blueprint JS](https://blueprintjs.com/), and [D3](https://d3js.org/). The service handled user registration, issued Javascript web tokens, allowed users to log their weight lifting sessions, and allowed users to record and view their progress over time by rendering timeseries plots of weight lifting records. The work helped me to land my first full-time web developer position.
 
 ### Intent
 
-`lift-journal-data` serves as an authority for Lift Journal database structure and interactions. The philosophy behind its creation is the same as the original `Lift Journal`: work with unfamiliar technologies to solve a real problem. It is one repository of three in an exercise in domain driven development. The intent of this repository is to provide the following:
+`lift-journal-data` serves as an authority for Lift Journal database structure and interactions. The philosophy behind its creation is the same as the original _Lift Journal_: work with unfamiliar technologies to solve a real problem. It is one repository of three in an exercise in domain driven development. The intent of this repository is to provide the following:
 
 1. Database table population
 2. Database migrations
@@ -27,9 +27,9 @@ I created the original _Lift Journal_ project in a monolithic repository using P
 4. Comprehensive tests
 5. Pydantic models
 
-#### Why Encapsulate and abstract SQLAlchemy ORM CRUD operations?
+#### Why encapsulate and abstract SQLAlchemy ORM CRUD operations?
 
-The project data structure provides for a limited scope of interactions with the data. By abstracting the SQLAlchemy operations, dependent projects can have focused, clean and easier to read code with less context shifts and limited potential for technical debt.
+The project data structure provides for a limited scope of interactions with the data. By abstracting the SQLAlchemy operations, dependent projects can have focused, clean, and easier to read code with less context shifts and limited potential for technical debt.
 
 #### Why include Pydantic models?
 
@@ -59,7 +59,7 @@ export LIFT_JOURNAL_DB_URL=<database url>
 
 ## Testing
 
-Because `lift-journal-data` requires no database engine-specific dependencies, an in-memory SQLite database can be used for testing. This simplifies test composition and configuration. Set the `LIFT_JOURNAL_DB_URL` to `sqlite://` before running tests.  
+Because `lift-journal-data` requires no database engine-specific dependencies, an in-memory SQLite database can be used for testing. This simplifies test composition and configuration. Set the `LIFT_JOURNAL_DB_URL` environment variable to `sqlite://` before running tests.  
 
 ## Acknowledgments
 
