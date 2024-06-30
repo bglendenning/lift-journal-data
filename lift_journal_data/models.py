@@ -49,6 +49,10 @@ def create_tables():
     Base.metadata.create_all(engine)
 
 
+def drop_tables():
+    Base.metadata.drop_all(engine)
+
+
 def load_lifts():
     with SessionLocal() as session:
         with open(Path(os.path.dirname(__file__)) / "fixtures/lifts.json") as lifts_json:
@@ -66,6 +70,11 @@ if __name__ == "__main__":
         help="Create tables in the database.",
     )
     parser.add_argument(
+        "--drop-tables",
+        action=argparse.BooleanOptionalAction,
+        help="Drop all tables in the database.",
+    )
+    parser.add_argument(
         "--load-lifts",
         action=argparse.BooleanOptionalAction,
         help="Populate the lift table with various lifts",
@@ -74,6 +83,9 @@ if __name__ == "__main__":
 
     if args.create_tables:
         create_tables()
+
+    if args.drop_tables:
+        drop_tables()
 
     if args.load_lifts:
         load_lifts()
