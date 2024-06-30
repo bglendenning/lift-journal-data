@@ -28,3 +28,11 @@ class UserCreate(BaseModel):
             raise ValueError("Passwords do not match")
 
         return self
+
+
+class UserPrivate(BaseModel):
+    email: EmailStr
+    password: str
+
+    class Config:
+        from_attributes = True
