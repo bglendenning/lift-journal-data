@@ -1,0 +1,14 @@
+[
+  {"name": "Barbell Bench Press"},
+  {"name": "Barbell Curls"},
+  {"name": "Barbell Dead Lifts"},
+  {"name": "Barbell Overhead Press"},
+  {"name": "Barbell Squats"},
+  {"name": "Dumbbell Bench Press"},
+  {"name": "Dumbbell Biceps Curls"},
+  {"name": "Dumbbell Overhead Press"},
+  {"name": "Dumbbell Triceps Extensions"},
+  {"name": "Dumbbell Squats"},
+  {"name": "Dumbbell Wrist Extensions"},
+  {"name": "Dumbbell Wrist Flexions"}
+]
