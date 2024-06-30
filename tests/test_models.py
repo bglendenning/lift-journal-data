@@ -5,6 +5,8 @@ from sqlalchemy import inspect
 
 
 class TestModels(unittest.TestCase):
+    tables = ["user", "lift"]
+
     def setUp(self):
         models.create_tables()
 
@@ -16,16 +18,18 @@ class TestModels(unittest.TestCase):
         with models.SessionLocal() as self.session:
             models.create_tables()
             inspector = inspect(self.session.get_bind())
-            self.assertTrue(inspector.has_table("user"))
-            self.assertTrue(inspector.has_table("lift"))
+
+            for table in self.tables:
+                self.assertTrue(inspector.has_table(table))
 
     def test_drop_tables(self):
         with models.SessionLocal() as self.session:
             models.create_tables()
             models.drop_tables()
             inspector = inspect(self.session.get_bind())
-            self.assertFalse(inspector.has_table("user"))
-            self.assertFalse(inspector.has_table("lift"))
+
+            for table in self.tables:
+                self.assertFalse(inspector.has_table(table))
 
     def test_load_lifts(self):
         with models.SessionLocal() as self.session:
