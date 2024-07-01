@@ -37,29 +37,29 @@ Pydantic models are used for serialization, validation, etc. in many modern Pyth
 
 ## Installation
 
-`lift-journal-data` can be imported into projects using `pip`. With an active Python virtual environment, install `lift-journal-data` using `pip install git+https://github.com/bglendenning/lift-journal-data.git` or add `git+https://github.com/bglendenning/lift-journal-data.git` to your project's requirements and `pip install -r <requirements_file>`.
+`lift-journal-data` can be installed using `pip`. With an active Python virtual environment, install `lift-journal-data` using `pip install git+https://github.com/bglendenning/lift-journal-data.git` or add `git+https://github.com/bglendenning/lift-journal-data.git` to your project's requirements and `pip install -r <requirements_file>`.
 
 ## Environment Variables
 
-`lift-journal-data` depends on some environment variables for database connection configuration. Environment variables can be provided in a granular fashion:
+`lift-journal-data` depends on some environment variables for database connection configuration. Environment variables can be provided granularly:
 
 ```bash
-export LIFT_JOURNAL_DB_ENGINE=<database engine>
-export LIFT_JOURNAL_DB_USERNAME=<database username>
-export LIFT_JOURNAL_DB_PASSWORD=<database password>
-export LIFT_JOUNRAL_DB_SERVER=<database server>
-export LIFT_JOURNAL_DB_NAME=<database name>
+export LIFT_JOURNAL_DATA_DB_ENGINE=<database engine>
+export LIFT_JOURNAL_DATA_DB_USERNAME=<database username>
+export LIFT_JOURNAL_DATA_DB_PASSWORD=<database password>
+export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
+export LIFT_JOURNAL_DATA_DB_NAME=<database name>
 ```
 
-You can also specify a full database URL. This is especially useful for creating an in-memory SQLite database for use in testing:
+You can also specify a full database URL. This value supersedes the granular environment variables.
 
 ```bash
-export LIFT_JOURNAL_DB_URL=<database url>
+export LIFT_JOURNAL_DATA_DB_URL=<database url>
 ```
 
 ## Testing
 
-Because `lift-journal-data` requires no database engine-specific dependencies, an in-memory SQLite database can be used for testing. This simplifies test composition and configuration. Set the `LIFT_JOURNAL_DB_URL` environment variable to `sqlite://` before running tests.  
+Because `lift-journal-data` requires no database engine-specific dependencies, an in-memory SQLite database is used for testing. This simplifies test composition and configuration.  
 
 ## Acknowledgments
 
