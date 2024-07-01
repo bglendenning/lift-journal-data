@@ -8,7 +8,7 @@ class Lift(Base):
     __tablename__ = "lift"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(64))
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
 
     def __repr__(self) -> str:
         return f"Lift(id={self.id!r}, name={self.name!r})"

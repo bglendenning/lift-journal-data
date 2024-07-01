@@ -1,6 +1,6 @@
 [project]
 name = "lift-journal-data"
-version = "0.4.2"
+version = "0.4.3"
 requires-python = ">=3.10"
 authors = [
     {name="Brandan Glendenning", email="brandan@glendigi.com"}
