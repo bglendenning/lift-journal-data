@@ -24,11 +24,11 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if args.create_tables:
-        create_tables(LiftJournalData().engine)
-
     if args.drop_tables:
         drop_tables(LiftJournalData().engine)
+
+    if args.create_tables:
+        create_tables(LiftJournalData().engine)
 
     if args.load_lifts:
         load_lifts(LiftJournalData().SessionLocal(), Lift)
