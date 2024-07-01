@@ -4,25 +4,37 @@ from tests.db import TestCaseDb
 
 
 class TestUserDAO(TestCaseDb):
-    email = "email@domain.tld"
+    user = UserSchema(
+        email="email@domain.tld",
+        password="password",
+    )
 
     def test_create(self):
         with self.SessionLocal() as session:
-            user = UserSchema(
-                email=self.email,
-                password="password",
-            )
-            db_user = UserDAO(session).create(user)
-            self.assertEqual(db_user.email, self.email)
+            db_user = UserDAO(session).create(self.user)
+
+        self.assertEqual(db_user.email, self.user.email)
 
     def test_create_with_existing_email(self):
         with self.SessionLocal() as session:
-            user = UserSchema(
-                email=self.email,
-                password="password",
-            )
-            UserDAO(session).create(user)
+            UserDAO(session).create(self.user)
+            db_user = UserDAO(session).create(self.user)
 
-            # User exists for provided email
-            db_user = UserDAO(session).create(user)
-            self.assertIs(db_user, None)
+        self.assertIs(db_user, None)
+
+    def test_get_for_email_password(self):
+        with self.SessionLocal() as session:
+            UserDAO(session).create(self.user)
+            db_user = UserDAO(session).get_for_email_password(self.user)
+
+        self.assertEqual(db_user.email, self.user.email)
+        self.assertEqual(db_user.password, self.user.password)
+
+        with self.SessionLocal() as session:
+            db_user = UserDAO(session).get_for_email_password(
+                UserSchema(
+                    email=self.user.email, password="incorrect password"
+                ),
+            )
+
+        self.assertEqual(db_user, None)

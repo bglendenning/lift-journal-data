@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
 
 from lift_journal_data.db.models import User
@@ -21,5 +21,13 @@ class UserDAO:
             db_user = None
         else:
             self.session.refresh(db_user)
+
+        return db_user
+
+    def get_for_email_password(self, user: UserSchema):
+        try:
+            db_user = self.session.query(User).filter_by(email=user.email, password=user.password).one()
+        except NoResultFound:
+            db_user = None
 
         return db_user
