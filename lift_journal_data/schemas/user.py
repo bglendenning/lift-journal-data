@@ -3,7 +3,7 @@ from typing_extensions import Self
 from pydantic import BaseModel, EmailStr, field_validator, model_validator, ValidationInfo
 
 
-class UserCreate(BaseModel):
+class UserSchema(BaseModel):
     email: EmailStr
     password1: str
     password2: str

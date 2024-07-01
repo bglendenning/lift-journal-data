@@ -1,5 +1,5 @@
 from lift_journal_data.crud.user import create_user
-from lift_journal_data.schemas.user import UserCreate
+from lift_journal_data.schemas.user import UserSchema
 from tests.db import TestCaseDb
 
 
@@ -8,7 +8,7 @@ class TestCrudUser(TestCaseDb):
 
     def test_create_user(self):
         with self.SessionLocal() as session:
-            user = UserCreate(
+            user = UserSchema(
                 email=self.email,
                 password1="password",
                 password2="password",
@@ -18,7 +18,7 @@ class TestCrudUser(TestCaseDb):
 
     def test_create_user_with_existing_email(self):
         with self.SessionLocal() as session:
-            user = UserCreate(
+            user = UserSchema(
                 email=self.email,
                 password1="password",
                 password2="password",

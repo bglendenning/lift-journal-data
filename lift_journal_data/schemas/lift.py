@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class LiftCreate(BaseModel):
+class LiftSchema(BaseModel):
     name: str
 
     class Config:
