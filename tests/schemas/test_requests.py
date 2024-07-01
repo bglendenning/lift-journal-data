@@ -18,7 +18,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_email_invalid(self):
         with self.assertRaises(ValidationError) as context:
-            user_register = UserSchema(
+            UserSchema(
                 email="email",
                 password="password",
             )
@@ -26,7 +26,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_password_invalid(self):
         with self.assertRaises(ValidationError) as context:
-            user_register = UserSchema(
+            UserSchema(
                 email=self.email,
                 password="",
             )

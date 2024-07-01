@@ -6,7 +6,7 @@ from tests.db import TestCaseDb
 class TestUserDAO(TestCaseDb):
     email = "email@domain.tld"
 
-    def test_create_user(self):
+    def test_create(self):
         with self.SessionLocal() as session:
             user = UserSchema(
                 email=self.email,
@@ -15,7 +15,7 @@ class TestUserDAO(TestCaseDb):
             db_user = UserDAO(session).create(user)
             self.assertEqual(db_user.email, self.email)
 
-    def test_create_user_with_existing_email(self):
+    def test_create_with_existing_email(self):
         with self.SessionLocal() as session:
             user = UserSchema(
                 email=self.email,

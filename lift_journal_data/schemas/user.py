@@ -8,7 +8,7 @@ class UserSchema(BaseModel):
     class Config:
         from_attributes = True
 
-    @field_validator("password")
+    @field_validator("email", "password")
     @classmethod
     def check_empty(cls, value: str, info: ValidationInfo) -> str:
         if not value:
