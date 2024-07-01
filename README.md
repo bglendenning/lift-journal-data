@@ -44,22 +44,28 @@ Pydantic models are used for serialization, validation, etc. in many modern Pyth
 `lift-journal-data` depends on some environment variables for database connection configuration. Environment variables can be provided granularly:
 
 ```bash
-export LIFT_JOURNAL_DATA_DB_ENGINE=<database engine>
-export LIFT_JOURNAL_DATA_DB_USERNAME=<database username>
-export LIFT_JOURNAL_DATA_DB_PASSWORD=<database password>
-export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
-export LIFT_JOURNAL_DATA_DB_NAME=<database name>
+user@host:./lift-journal-data/$ export LIFT_JOURNAL_DATA_DB_ENGINE=<database engine>
+user@host:./lift-journal-data/$ export LIFT_JOURNAL_DATA_DB_USERNAME=<database username>
+user@host:./lift-journal-data/$ export LIFT_JOURNAL_DATA_DB_PASSWORD=<database password>
+user@host:./lift-journal-data/$ export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
+user@host:./lift-journal-data/$ export LIFT_JOURNAL_DATA_DB_NAME=<database name>
 ```
 
 You can also specify a full database URL. This value supersedes the granular environment variables.
 
 ```bash
-export LIFT_JOURNAL_DATA_DB_URL=<database url>
+user@host:./lift-journal-data/$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
 ```
 
 ## Testing
 
-Because `lift-journal-data` requires no database engine-specific dependencies, an in-memory SQLite database is used for testing. This simplifies test composition and configuration.  
+Because `lift-journal-data` has no database engine-specific dependencies, an in-memory SQLite database is used for testing. This simplifies test composition and configuration.
+
+Python's `unittest` is used for running tests:
+
+```bash
+user@host:./lift-journal-data/$ python -m unittest discover
+```
 
 ## Acknowledgments
 
