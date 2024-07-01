@@ -24,9 +24,9 @@ class UserDAO:
 
         return db_user
 
-    def get_for_email_password(self, user: UserSchema):
+    def get_for_email(self, email: str):
         try:
-            db_user = self.session.query(User).filter_by(email=user.email, password=user.password).one()
+            db_user = self.session.query(User).filter_by(email=email).one()
         except NoResultFound:
             db_user = None
 

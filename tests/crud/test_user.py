@@ -22,19 +22,14 @@ class TestUserDAO(TestCaseDb):
 
         self.assertIs(db_user, None)
 
-    def test_get_for_email_password(self):
+    def test_get_for_email(self):
         with self.SessionLocal() as session:
             UserDAO(session).create(self.user)
-            db_user = UserDAO(session).get_for_email_password(self.user)
+            db_user = UserDAO(session).get_for_email(self.user.email)
 
         self.assertEqual(db_user.email, self.user.email)
-        self.assertEqual(db_user.password, self.user.password)
 
         with self.SessionLocal() as session:
-            db_user = UserDAO(session).get_for_email_password(
-                UserSchema(
-                    email=self.user.email, password="incorrect password"
-                ),
-            )
+            db_user = UserDAO(session).get_for_email(f"1{self.user.email}")
 
         self.assertEqual(db_user, None)
