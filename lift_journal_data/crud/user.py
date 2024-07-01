@@ -11,23 +11,26 @@ class UserDAO:
 
     def create(self, user: UserSchema):
         db_user = User(email=user.email, password=user.password)
-        self.session.add(db_user)
 
-        try:
-            self.session.commit()
-        except IntegrityError:
-            # Attempted to create User with non-unique email
-            self.session.rollback()
-            db_user = None
-        else:
-            self.session.refresh(db_user)
+        with self.session:
+            self.session.add(db_user)
+
+            try:
+                self.session.commit()
+            except IntegrityError:
+                # Attempted to create User with non-unique email
+                self.session.rollback()
+                db_user = None
+            else:
+                self.session.refresh(db_user)
 
         return db_user
 
     def get_for_email(self, email: str):
-        try:
-            db_user = self.session.query(User).filter_by(email=email).one()
-        except NoResultFound:
-            db_user = None
+        with self.session:
+            try:
+                db_user = self.session.query(User).filter_by(email=email).one()
+            except NoResultFound:
+                db_user = None
 
         return db_user
