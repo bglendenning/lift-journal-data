@@ -1,38 +1,32 @@
-import unittest
-
-from lift_journal_data import models
 from sqlalchemy import inspect
 
+from lift_journal_data.db.manage import create_tables, drop_tables, load_lifts
+from lift_journal_data.db.models import Lift
+from tests.db import TestCaseDb
 
-class TestModels(unittest.TestCase):
+
+class TestModels(TestCaseDb):
     tables = ["user", "lift"]
 
-    def setUp(self):
-        models.create_tables()
-
-    def tearDown(self):
-        # Delete in-memory SQLite database
-        models.engine.dispose()
-
     def test_create_tables(self):
-        with models.SessionLocal() as self.session:
-            models.create_tables()
-            inspector = inspect(self.session.get_bind())
+        with self.SessionLocal() as session:
+            create_tables(self.engine)
+            inspector = inspect(session.get_bind())
 
             for table in self.tables:
                 self.assertTrue(inspector.has_table(table))
 
     def test_drop_tables(self):
-        with models.SessionLocal() as self.session:
-            models.create_tables()
-            models.drop_tables()
-            inspector = inspect(self.session.get_bind())
+        with self.SessionLocal() as session:
+            create_tables(self.engine)
+            drop_tables(self.engine)
+            inspector = inspect(session.get_bind())
 
             for table in self.tables:
                 self.assertFalse(inspector.has_table(table))
 
     def test_load_lifts(self):
-        with models.SessionLocal() as self.session:
-            models.load_lifts()
-            lifts = self.session.query(models.Lift).all()
+        with self.SessionLocal() as session:
+            load_lifts(session, Lift)
+            lifts = session.query(Lift).all()
             self.assertEqual(len(lifts), 12)

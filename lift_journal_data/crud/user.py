@@ -1,12 +1,12 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from lift_journal_data import models
+from lift_journal_data.db.models import User
 from lift_journal_data.schemas.user import UserCreate
 
 
 def create_user(session: Session, user: UserCreate):
-    db_user = models.User(email=user.email, password=user.password1)
+    db_user = User(email=user.email, password=user.password1)
     session.add(db_user)
 
     try:
