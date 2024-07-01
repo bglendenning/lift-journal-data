@@ -1,6 +1,6 @@
 import argparse
 
-from lift_journal_data.db import engine, SessionLocal
+from lift_journal_data.db import LiftJournalData
 from lift_journal_data.db.manage import create_tables, drop_tables, load_lifts
 from lift_journal_data.db.models import Lift
 
@@ -25,10 +25,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.create_tables:
-        create_tables(engine)
+        create_tables(LiftJournalData().engine)
 
     if args.drop_tables:
-        drop_tables(engine)
+        drop_tables(LiftJournalData().engine)
 
     if args.load_lifts:
-        load_lifts(SessionLocal, Lift)
+        load_lifts(LiftJournalData().SessionLocal(), Lift)
