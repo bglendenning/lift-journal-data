@@ -5,17 +5,21 @@ from lift_journal_data.db.models import User
 from lift_journal_data.schemas.user import UserSchema
 
 
-def create_user(session: Session, user: UserSchema):
-    db_user = User(email=user.email, password=user.password1)
-    session.add(db_user)
+class UserDAO:
+    def __init__(self, session: Session):
+        self.session = session
 
-    try:
-        session.commit()
-    except IntegrityError:
-        # Attempted to create User with non-unique email
-        session.rollback()
-        db_user = None
-    else:
-        session.refresh(db_user)
+    def create(self, user: UserSchema):
+        db_user = User(email=user.email, password=user.password)
+        self.session.add(db_user)
 
-    return db_user
+        try:
+            self.session.commit()
+        except IntegrityError:
+            # Attempted to create User with non-unique email
+            self.session.rollback()
+            db_user = None
+        else:
+            self.session.refresh(db_user)
+
+        return db_user

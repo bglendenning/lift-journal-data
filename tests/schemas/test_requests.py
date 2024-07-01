@@ -9,46 +9,25 @@ class TestUserSchema(unittest.TestCase):
     email = "email@domain.tld"
 
     def test_valid(self):
-        """UserSchema is valid."""
-
         user_register = UserSchema(
             email=self.email,
-            password1="password",
-            password2="password",
+            password="password",
         )
         self.assertEqual(user_register.email, self.email)
-        self.assertEqual(user_register.password1, "password")
-        self.assertEqual(user_register.password2, "password")
+        self.assertEqual(user_register.password, "password")
 
     def test_email_invalid(self):
-        """UserSchema.email is invalid."""
-
         with self.assertRaises(ValidationError) as context:
             user_register = UserSchema(
                 email="email",
-                password1="password",
-                password2="password",
+                password="password",
             )
         self.assertIn("email", str(context.exception))
 
     def test_password_invalid(self):
-        """UserSchema.password1 or password2 are invalid."""
-
         with self.assertRaises(ValidationError) as context:
             user_register = UserSchema(
                 email=self.email,
-                password1="",
-                password2="password",
+                password="",
             )
-        self.assertIn("password1", str(context.exception))
-
-    def test_passwords_do_not_match(self):
-        """UserSchema.password1 and password2 do not match."""
-
-        with self.assertRaises(ValidationError) as context:
-            user_register = UserSchema(
-                email=self.email,
-                password1="password1",
-                password2="password2",
-            )
-        self.assertIn("Passwords do not match", str(context.exception))
+        self.assertIn("password", str(context.exception))
