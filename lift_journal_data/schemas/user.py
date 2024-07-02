@@ -21,7 +21,6 @@ class UserBaseSchema(BaseModel):
 
 
 class UserSchema(UserBaseSchema):
-    id: int
     password: str
 
     class Config:
