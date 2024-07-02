@@ -33,3 +33,7 @@ class UserCreateSchema(UserBaseSchema):
             raise ValueError(f"{info.field_name} cannot be empty")
 
         return value
+
+
+class UserReadSchema(UserBaseSchema):
+    id: int
