@@ -2,14 +2,14 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
 
 from lift_journal_data.db.models import User
-from lift_journal_data.schemas.user import UserSchema
+from lift_journal_data.schemas.user import UserCreateSchema
 
 
 class UserDAO:
     def __init__(self, session: Session):
         self.session = session
 
-    def create(self, user: UserSchema):
+    def create(self, user: UserCreateSchema):
         db_user = User(email=user.email, password=user.password)
 
         with self.session:

@@ -1,10 +1,10 @@
 from lift_journal_data.crud.user import UserDAO
-from lift_journal_data.schemas.user import UserSchema
+from lift_journal_data.schemas.user import UserCreateSchema
 from tests.db import TestCaseDb
 
 
 class TestUserDAO(TestCaseDb):
-    user = UserSchema(
+    user = UserCreateSchema(
         email="email@domain.tld",
         password="password",
     )

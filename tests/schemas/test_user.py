@@ -2,14 +2,14 @@ import unittest
 
 from pydantic_core import ValidationError
 
-from lift_journal_data.schemas.user import UserSchema
+from lift_journal_data.schemas.user import UserCreateSchema
 
 
-class TestUserSchema(unittest.TestCase):
+class TestUserCreateSchema(unittest.TestCase):
     email = "email@domain.tld"
 
     def test_valid(self):
-        user_register = UserSchema(
+        user_register = UserCreateSchema(
             email=self.email,
             password="password",
         )
@@ -18,7 +18,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_email_invalid(self):
         with self.assertRaises(ValidationError) as context:
-            UserSchema(
+            UserCreateSchema(
                 email="",
                 password="password",
             )
@@ -26,7 +26,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_password_invalid(self):
         with self.assertRaises(ValidationError) as context:
-            UserSchema(
+            UserCreateSchema(
                 email=self.email,
                 password="",
             )

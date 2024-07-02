@@ -20,13 +20,13 @@ class UserBaseSchema(BaseModel):
         return value
 
 
-class UserSchema(UserBaseSchema):
+class UserCreateSchema(UserBaseSchema):
     password: str
 
     class Config:
         from_attributes = True
 
-    @field_validator("email", "password")
+    @field_validator("password")
     @classmethod
     def check_password_empty(cls, value: str, info: ValidationInfo) -> str:
         if not check_empty(value):
