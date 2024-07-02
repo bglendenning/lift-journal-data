@@ -1,8 +1,26 @@
 from pydantic import BaseModel, EmailStr, field_validator, ValidationInfo
 
 
-class UserSchema(BaseModel):
+def check_empty(value: str):
+    if value:
+        return True
+
+    return False
+
+
+class UserBaseSchema(BaseModel):
     email: EmailStr
+
+    @field_validator("email")
+    @classmethod
+    def check_email_empty(cls, value: str, info: ValidationInfo) -> str:
+        if not check_empty(value):
+            raise ValueError(f"{info.field_name} cannot be empty")
+
+        return value
+
+
+class UserSchema(UserBaseSchema):
     password: str
 
     class Config:
@@ -10,8 +28,8 @@ class UserSchema(BaseModel):
 
     @field_validator("email", "password")
     @classmethod
-    def check_empty(cls, value: str, info: ValidationInfo) -> str:
-        if not value:
+    def check_password_empty(cls, value: str, info: ValidationInfo) -> str:
+        if not check_empty(value):
             raise ValueError(f"{info.field_name} cannot be empty")
 
         return value
