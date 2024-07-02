@@ -11,9 +11,9 @@ class Set(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    user: Mapped["lift_journal_data.db.models.User"] = relationship(back_populates="sets")
+    user: Mapped["lift_journal_data.db.models.user.User"] = relationship(back_populates="sets")
     lift_id: Mapped[int] = mapped_column(ForeignKey("lift.id"), nullable=False)
-    lift: Mapped["lift_journal_data.db.models.Lift"] = relationship()
+    lift: Mapped["lift_journal_data.db.models.lift.Lift"] = relationship()
     repetitions: Mapped[int] = mapped_column(SmallInteger(), nullable=False)
     weight: Mapped[int] = mapped_column(SmallInteger(), nullable=False)
     date_performed: Mapped[date] = mapped_column(Date(), nullable=False)
