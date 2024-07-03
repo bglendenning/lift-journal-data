@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
 
 from lift_journal_data.db.models import LiftSet
-from lift_journal_data.schemas.lift_set import LiftSetCreateSchema
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema
 
 
 class LiftSetDAO:
@@ -10,9 +10,9 @@ class LiftSetDAO:
         self.session = session
         self.user_id = user_id
 
-    def create(self, lift_set: LiftSetCreateSchema):
+    def create(self, lift_set: LiftSetBaseSchema):
         db_lift_set = LiftSet(
-            user_id=lift_set.user_id,
+            user_id=self.user_id,
             lift_id=lift_set.lift_id,
             repetitions=lift_set.repetitions,
             weight=lift_set.weight,

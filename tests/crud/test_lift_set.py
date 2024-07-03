@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from lift_journal_data.crud.lift_set import LiftSetDAO
 from lift_journal_data.crud.user import UserDAO
 from lift_journal_data.db.manage import load_lifts
-from lift_journal_data.db.models import Lift, LiftSet
-from lift_journal_data.schemas.lift_set import LiftSetCreateSchema
+from lift_journal_data.db.models import Lift
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetCreateSchema
 from lift_journal_data.schemas.user import UserCreateSchema, UserReadSchema
 from tests.db import TestCaseDb
 
@@ -31,8 +31,7 @@ class TestLiftSetDAO(TestCaseDb):
         )
         date_now = datetime.now().date()
         time_now = datetime.now().time()
-        lift_set = LiftSetCreateSchema(
-            user_id=user.id,
+        lift_set = LiftSetBaseSchema(
             lift_id=self.lift.id,
             repetitions=1,
             weight=1,
@@ -53,8 +52,7 @@ class TestLiftSetDAO(TestCaseDb):
     def test_get_for_lift_set_id(self):
         with self.SessionLocal() as session:
             LiftSetDAO(session, self.db_user.id).create(
-                LiftSetCreateSchema(
-                    user_id=self.db_user.id,
+                LiftSetBaseSchema(
                     lift_id=self.lift.id,
                     repetitions=1,
                     weight=1,
@@ -70,8 +68,7 @@ class TestLiftSetDAO(TestCaseDb):
         user2 = UserDAO(self.SessionLocal()).create(UserCreateSchema(email="email2@domain.tld", password="password"))
         with self.SessionLocal() as session:
             LiftSetDAO(session, user2.id).create(
-                LiftSetCreateSchema(
-                    user_id=user2.id,
+                LiftSetBaseSchema(
                     lift_id=self.lift.id,
                     repetitions=1,
                     weight=1,
@@ -82,8 +79,7 @@ class TestLiftSetDAO(TestCaseDb):
 
             for i in range(2):
                 LiftSetDAO(session, self.db_user.id).create(
-                    LiftSetCreateSchema(
-                        user_id=self.db_user.id,
+                    LiftSetBaseSchema(
                         lift_id=self.lift.id,
                         repetitions=1,
                         weight=1,
@@ -98,8 +94,7 @@ class TestLiftSetDAO(TestCaseDb):
 
         with self.SessionLocal() as session:
             LiftSetDAO(session, self.db_user.id).create(
-                LiftSetCreateSchema(
-                    user_id=self.db_user.id,
+                LiftSetBaseSchema(
                     lift_id=self.lift.id,
                     repetitions=1,
                     weight=1,
