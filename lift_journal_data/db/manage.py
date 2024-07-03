@@ -1,10 +1,14 @@
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
-from lift_journal_data.db import Base, LiftJournalData
-from lift_journal_data.db.models import Lift
+try:
+    from lift_journal_data.db import Base, LiftJournalData
+    from lift_journal_data.db.models import Lift
+except ImportError:
+    sys.exit("manage.py must be imported, executed as a module, or run from the CLI using the ljd_manage entry point.")
 
 
 def create_tables(engine):
