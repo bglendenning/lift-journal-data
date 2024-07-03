@@ -1,6 +1,6 @@
 [project]
 name = "lift-journal-data"
-version = "0.6.0"
+version = "0.6.1"
 requires-python = ">=3.10"
 authors = [
     {name="Brandan Glendenning", email="brandan@glendigi.com"}
@@ -11,3 +11,6 @@ dependencies = [
     "pydantic",
     "email-validator"
 ]
+
+[project.scripts]
+ljd_manage = "lift_journal_data.db.manage:main"
