@@ -6,8 +6,9 @@ from lift_journal_data.schemas.lift_set import LiftSetCreateSchema
 
 
 class LiftSetDAO:
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, user_id: int):
         self.session = session
+        self.user_id = user_id
 
     def create(self, lift_set: LiftSetCreateSchema):
         db_lift_set = LiftSet(
@@ -35,19 +36,19 @@ class LiftSetDAO:
     def get_for_lift_set_id(self, lift_set_id: int):
         with self.session:
             try:
-                db_lift_set = self.session.query(LiftSet).filter_by(id=lift_set_id).one()
+                db_lift_set = self.session.query(LiftSet).filter_by(user_id=self.user_id, id=lift_set_id).one()
             except NoResultFound:
                 db_lift_set = None
 
         return db_lift_set
 
-    def get_for_user_id(self, user_id: int):
+    def get_for_user_id(self):
         with self.session:
             try:
                 db_lift_sets = (
                     self.session
                     .query(LiftSet)
-                    .filter_by(user_id=user_id)
+                    .filter_by(user_id=self.user_id)
                     .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
                 )
             except NoResultFound:

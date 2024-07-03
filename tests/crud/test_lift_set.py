@@ -41,7 +41,7 @@ class TestLiftSetDAO(TestCaseDb):
         )
 
         with self.SessionLocal() as session:
-            db_lift_set = LiftSetDAO(session).create(lift_set)
+            db_lift_set = LiftSetDAO(session, self.db_user.id).create(lift_set)
 
         self.assertEqual(db_lift_set.user_id, user.id)
         self.assertEqual(db_lift_set.lift_id, self.lift.id)
@@ -52,7 +52,7 @@ class TestLiftSetDAO(TestCaseDb):
 
     def test_get_for_lift_set_id(self):
         with self.SessionLocal() as session:
-            LiftSetDAO(session).create(
+            LiftSetDAO(session, self.db_user.id).create(
                 LiftSetCreateSchema(
                     user_id=self.db_user.id,
                     lift_id=self.lift.id,
@@ -62,14 +62,14 @@ class TestLiftSetDAO(TestCaseDb):
                     time_performed=datetime.now().time(),
                 )
             )
-            db_lift_set = LiftSetDAO(session).get_for_lift_set_id(1)
+            db_lift_set = LiftSetDAO(session, self.db_user.id).get_for_lift_set_id(1)
 
         self.assertEqual(db_lift_set.user_id, self.db_user.id)
 
     def test_get_for_user_id(self):
         user2 = UserDAO(self.SessionLocal()).create(UserCreateSchema(email="email2@domain.tld", password="password"))
         with self.SessionLocal() as session:
-            LiftSetDAO(session).create(
+            LiftSetDAO(session, user2.id).create(
                 LiftSetCreateSchema(
                     user_id=user2.id,
                     lift_id=self.lift.id,
@@ -81,7 +81,7 @@ class TestLiftSetDAO(TestCaseDb):
             )
 
             for i in range(2):
-                LiftSetDAO(session).create(
+                LiftSetDAO(session, self.db_user.id).create(
                     LiftSetCreateSchema(
                         user_id=self.db_user.id,
                         lift_id=self.lift.id,
@@ -92,12 +92,12 @@ class TestLiftSetDAO(TestCaseDb):
                     )
                 )
 
-            db_lift_sets = LiftSetDAO(session).get_for_user_id(self.db_user.id)
+            db_lift_sets = LiftSetDAO(session, self.db_user.id).get_for_user_id()
 
         self.assertEqual(db_lift_sets.count(), 2)
 
         with self.SessionLocal() as session:
-            LiftSetDAO(session).create(
+            LiftSetDAO(session, self.db_user.id).create(
                 LiftSetCreateSchema(
                     user_id=self.db_user.id,
                     lift_id=self.lift.id,
