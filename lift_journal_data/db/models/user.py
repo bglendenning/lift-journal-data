@@ -10,7 +10,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
-    sets: Mapped[list["lift_journal_data.db.models.set.Set"]] = relationship(back_populates="user")
+    lift_sets: Mapped[list["lift_journal_data.db.models.lift_set.LiftSet"]] = relationship(back_populates="user")
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, email={self.email!r})"

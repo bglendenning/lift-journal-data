@@ -2,11 +2,8 @@ from datetime import date, time
 
 from pydantic import BaseModel
 
-from lift_journal_data.schemas.lift import LiftSchema
-from lift_journal_data.schemas.user import UserReadSchema
 
-
-class SetBaseSchema(BaseModel):
+class LiftSetBaseSchema(BaseModel):
     lift_id: int
     repetitions: int
     weight: int
@@ -17,5 +14,5 @@ class SetBaseSchema(BaseModel):
         from_attributes = True
 
 
-class SetCreateSchema(SetBaseSchema):
+class LiftSetCreateSchema(LiftSetBaseSchema):
     user_id: int
