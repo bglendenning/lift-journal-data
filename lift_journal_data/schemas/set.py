@@ -7,6 +7,7 @@ from lift_journal_data.schemas.user import UserReadSchema
 
 
 class SetBaseSchema(BaseModel):
+    lift_id: int
     repetitions: int
     weight: int
     date_performed: date
@@ -14,5 +15,4 @@ class SetBaseSchema(BaseModel):
 
 
 class SetCreateSchema(SetBaseSchema):
-    user: UserReadSchema
-    lift: LiftSchema
+    user_id: int

@@ -32,8 +32,8 @@ class TestSetDAO(TestCaseDb):
         date_now = datetime.now().date()
         time_now = datetime.now().time()
         lift_set = SetCreateSchema(
-            user=user,
-            lift=self.lift,
+            user_id=user.id,
+            lift_id=self.lift.id,
             repetitions=1,
             weight=1,
             date_performed=date_now,

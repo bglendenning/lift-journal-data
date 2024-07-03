@@ -11,8 +11,8 @@ class SetDAO:
 
     def create(self, lift_set: SetCreateSchema):
         db_set = Set(
-            user_id=lift_set.user.id,
-            lift_id=lift_set.lift.id,
+            user_id=lift_set.user_id,
+            lift_id=lift_set.lift_id,
             repetitions=lift_set.repetitions,
             weight=lift_set.weight,
             date_performed=lift_set.date_performed,
