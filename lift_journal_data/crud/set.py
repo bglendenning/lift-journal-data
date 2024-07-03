@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from lift_journal_data.db.models import Set

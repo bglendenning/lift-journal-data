@@ -1,6 +1,6 @@
 from datetime import date, time
 
-from sqlalchemy import Date, ForeignKey, SmallInteger, String, Time
+from sqlalchemy import Date, ForeignKey, SmallInteger, Time
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lift_journal_data.db import Base
