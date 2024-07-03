@@ -1,7 +1,6 @@
 import argparse
 import json
 import os
-import sys
 from pathlib import Path
 
 from lift_journal_data.db import Base, LiftJournalData

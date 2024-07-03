@@ -1,0 +1,1 @@
+include lift_journal_data/fixtures/*.json
