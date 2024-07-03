@@ -35,7 +35,12 @@ class LiftSetDAO:
     def get_collection_for_user_id(self, user_id: int):
         with self.session:
             try:
-                db_lift_sets = self.session.query(LiftSet).filter_by(user_id=user_id)
+                db_lift_sets = (
+                    self.session
+                    .query(LiftSet)
+                    .filter_by(user_id=user_id)
+                    .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
+                )
             except NoResultFound:
                 db_lift_sets = None
 

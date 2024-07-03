@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from lift_journal_data.crud.lift_set import LiftSetDAO
 from lift_journal_data.crud.user import UserDAO
@@ -68,9 +68,23 @@ class TestLiftSetDAO(TestCaseDb):
                     repetitions=1,
                     weight=1,
                     date_performed=datetime.now().date(),
-                    time_performed=datetime.now().time(),
+                    time_performed=(datetime.now() + timedelta(seconds=i)).time(),
                 )
             )
 
         db_lift_sets = LiftSetDAO(self.SessionLocal()).get_collection_for_user_id(self.db_user.id)
         self.assertEqual(db_lift_sets.count(), 2)
+
+        LiftSetDAO(self.SessionLocal()).create(
+            LiftSetCreateSchema(
+                user_id=self.db_user.id,
+                lift_id=self.lift.id,
+                repetitions=1,
+                weight=1,
+                date_performed=(datetime.now() + timedelta(days=1)).date(),
+                time_performed=datetime.now().time(),
+            )
+        )
+        # Ordered by date descending, time descending
+        self.assertGreater(db_lift_sets[0].date_performed, db_lift_sets[1].date_performed)
+        self.assertGreater(db_lift_sets[1].time_performed, db_lift_sets[2].time_performed)
