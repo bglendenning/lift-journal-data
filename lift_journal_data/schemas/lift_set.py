@@ -16,3 +16,7 @@ class LiftSetBaseSchema(BaseModel):
 
 class LiftSetCreateSchema(LiftSetBaseSchema):
     user_id: int
+
+
+class LiftSetReadSchema(LiftSetBaseSchema):
+    id: int
