@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
 
 from lift_journal_data.db.models import LiftSet
@@ -31,3 +31,12 @@ class LiftSetDAO:
                 self.session.refresh(db_lift_set)
 
         return db_lift_set
+
+    def get_collection_for_user_id(self, user_id: int):
+        with self.session:
+            try:
+                db_lift_sets = self.session.query(LiftSet).filter_by(user_id=user_id)
+            except NoResultFound:
+                db_lift_sets = None
+
+        return db_lift_sets

@@ -46,3 +46,31 @@ class TestLiftSetDAO(TestCaseDb):
         self.assertEqual(db_lift_set.weight, 1)
         self.assertEqual(db_lift_set.date_performed, date_now)
         self.assertEqual(db_lift_set.time_performed, time_now)
+
+    def test_get_collection_for_user_id(self):
+        user2 = UserDAO(self.SessionLocal()).create(UserCreateSchema(email="email2@domain.tld", password="password"))
+        LiftSetDAO(self.SessionLocal()).create(
+            LiftSetCreateSchema(
+                user_id=user2.id,
+                lift_id=self.lift.id,
+                repetitions=1,
+                weight=1,
+                date_performed=datetime.now().date(),
+                time_performed=datetime.now().time(),
+            )
+        )
+
+        for i in range(2):
+            LiftSetDAO(self.SessionLocal()).create(
+                LiftSetCreateSchema(
+                    user_id=self.db_user.id,
+                    lift_id=self.lift.id,
+                    repetitions=1,
+                    weight=1,
+                    date_performed=datetime.now().date(),
+                    time_performed=datetime.now().time(),
+                )
+            )
+
+        db_lift_sets = LiftSetDAO(self.SessionLocal()).get_collection_for_user_id(self.db_user.id)
+        self.assertEqual(db_lift_sets.count(), 2)
