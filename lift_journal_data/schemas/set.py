@@ -13,6 +13,9 @@ class SetBaseSchema(BaseModel):
     date_performed: date
     time_performed: time
 
+    class Config:
+        from_attributes = True
+
 
 class SetCreateSchema(SetBaseSchema):
     user_id: int
