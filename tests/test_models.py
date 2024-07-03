@@ -27,6 +27,6 @@ class TestModels(TestCaseDb):
 
     def test_load_lifts(self):
         with self.SessionLocal() as session:
-            load_lifts(session, Lift)
+            load_lifts(session)
             lifts = session.query(Lift).all()
             self.assertEqual(len(lifts), 12)

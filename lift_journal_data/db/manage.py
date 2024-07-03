@@ -19,10 +19,10 @@ def drop_tables(engine):
     Base.metadata.drop_all(engine)
 
 
-def load_lifts(session, lift_orm):
+def load_lifts(session):
     with session:
         with open(Path(os.path.dirname(__file__)) / "../fixtures/lifts.json") as lifts_json:
-            lifts = [lift_orm(name=lift["name"]) for lift in json.load(lifts_json)]
+            lifts = [Lift(name=lift["name"]) for lift in json.load(lifts_json)]
 
         session.add_all(lifts)
         session.commit()
@@ -56,7 +56,7 @@ def main():
         print("Created tables.")
 
     if args.load_lifts:
-        load_lifts(LiftJournalData().SessionLocal(), Lift)
+        load_lifts(LiftJournalData().SessionLocal())
         print("Loaded lifts.")
 
 

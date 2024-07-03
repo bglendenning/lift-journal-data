@@ -19,7 +19,7 @@ class TestLiftSetDAO(TestCaseDb):
         )
         self.db_user = UserDAO(self.SessionLocal()).create(user)
 
-        load_lifts(self.SessionLocal(), Lift)
+        load_lifts(self.SessionLocal())
 
         with self.SessionLocal() as session:
             self.lift = session.query(Lift).filter_by(id=1).one()
