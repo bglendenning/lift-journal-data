@@ -34,6 +34,18 @@ user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
 * `--drop-tables` drops all existent tables defined in the ORM models
 * `--load-lifts` populates the `lift` table with fixture data
 
+Ordering of arguments has no impact on order of operations:
+
+```bash
+user@host:./lift-journal-data$ python -m lift_journal_data.db.manage --create-tables --drop-tables --load-lifts
+```
+
+The preceding command will result in the following order of operations:
+
+1. drop all tables
+2. create all tables
+3. load lifts fixture
+
 ### Using the management script from within the repository
 
 _Lift Journal Data_'s database management script must be executed as a module.

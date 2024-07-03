@@ -32,7 +32,16 @@ class LiftSetDAO:
 
         return db_lift_set
 
-    def get_collection_for_user_id(self, user_id: int):
+    def get_for_lift_set_id(self, lift_set_id: int):
+        with self.session:
+            try:
+                db_lift_set = self.session.query(LiftSet).filter_by(id=lift_set_id).one()
+            except NoResultFound:
+                db_lift_set = None
+
+        return db_lift_set
+
+    def get_for_user_id(self, user_id: int):
         with self.session:
             try:
                 db_lift_sets = (

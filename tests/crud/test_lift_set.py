@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from lift_journal_data.crud.lift_set import LiftSetDAO
 from lift_journal_data.crud.user import UserDAO
 from lift_journal_data.db.manage import load_lifts
-from lift_journal_data.db.models import Lift
+from lift_journal_data.db.models import Lift, LiftSet
 from lift_journal_data.schemas.lift_set import LiftSetCreateSchema
 from lift_journal_data.schemas.user import UserCreateSchema, UserReadSchema
 from tests.db import TestCaseDb
@@ -39,7 +39,10 @@ class TestLiftSetDAO(TestCaseDb):
             date_performed=date_now,
             time_performed=time_now,
         )
-        db_lift_set = LiftSetDAO(self.SessionLocal()).create(lift_set)
+
+        with self.SessionLocal() as session:
+            db_lift_set = LiftSetDAO(session).create(lift_set)
+
         self.assertEqual(db_lift_set.user_id, user.id)
         self.assertEqual(db_lift_set.lift_id, self.lift.id)
         self.assertEqual(db_lift_set.repetitions, 1)
@@ -47,44 +50,65 @@ class TestLiftSetDAO(TestCaseDb):
         self.assertEqual(db_lift_set.date_performed, date_now)
         self.assertEqual(db_lift_set.time_performed, time_now)
 
-    def test_get_collection_for_user_id(self):
-        user2 = UserDAO(self.SessionLocal()).create(UserCreateSchema(email="email2@domain.tld", password="password"))
-        LiftSetDAO(self.SessionLocal()).create(
-            LiftSetCreateSchema(
-                user_id=user2.id,
-                lift_id=self.lift.id,
-                repetitions=1,
-                weight=1,
-                date_performed=datetime.now().date(),
-                time_performed=datetime.now().time(),
-            )
-        )
-
-        for i in range(2):
-            LiftSetDAO(self.SessionLocal()).create(
+    def test_get_for_lift_set_id(self):
+        with self.SessionLocal() as session:
+            LiftSetDAO(session).create(
                 LiftSetCreateSchema(
                     user_id=self.db_user.id,
                     lift_id=self.lift.id,
                     repetitions=1,
                     weight=1,
                     date_performed=datetime.now().date(),
-                    time_performed=(datetime.now() + timedelta(seconds=i)).time(),
+                    time_performed=datetime.now().time(),
+                )
+            )
+            db_lift_set = LiftSetDAO(session).get_for_lift_set_id(1)
+
+        self.assertEqual(db_lift_set.user_id, self.db_user.id)
+
+    def test_get_for_user_id(self):
+        user2 = UserDAO(self.SessionLocal()).create(UserCreateSchema(email="email2@domain.tld", password="password"))
+        with self.SessionLocal() as session:
+            LiftSetDAO(session).create(
+                LiftSetCreateSchema(
+                    user_id=user2.id,
+                    lift_id=self.lift.id,
+                    repetitions=1,
+                    weight=1,
+                    date_performed=datetime.now().date(),
+                    time_performed=datetime.now().time(),
                 )
             )
 
-        db_lift_sets = LiftSetDAO(self.SessionLocal()).get_collection_for_user_id(self.db_user.id)
+            for i in range(2):
+                LiftSetDAO(session).create(
+                    LiftSetCreateSchema(
+                        user_id=self.db_user.id,
+                        lift_id=self.lift.id,
+                        repetitions=1,
+                        weight=1,
+                        date_performed=datetime.now().date(),
+                        time_performed=(datetime.now() + timedelta(seconds=i)).time(),
+                    )
+                )
+
+            db_lift_sets = LiftSetDAO(session).get_for_user_id(self.db_user.id)
+
         self.assertEqual(db_lift_sets.count(), 2)
 
-        LiftSetDAO(self.SessionLocal()).create(
-            LiftSetCreateSchema(
-                user_id=self.db_user.id,
-                lift_id=self.lift.id,
-                repetitions=1,
-                weight=1,
-                date_performed=(datetime.now() + timedelta(days=1)).date(),
-                time_performed=datetime.now().time(),
+        with self.SessionLocal() as session:
+            LiftSetDAO(session).create(
+                LiftSetCreateSchema(
+                    user_id=self.db_user.id,
+                    lift_id=self.lift.id,
+                    repetitions=1,
+                    weight=1,
+                    date_performed=(datetime.now() + timedelta(days=1)).date(),
+                    time_performed=datetime.now().time(),
+                )
             )
-        )
+
         # Ordered by date descending, time descending
+        self.assertEqual(db_lift_sets.count(), 3)
         self.assertGreater(db_lift_sets[0].date_performed, db_lift_sets[1].date_performed)
         self.assertGreater(db_lift_sets[1].time_performed, db_lift_sets[2].time_performed)
