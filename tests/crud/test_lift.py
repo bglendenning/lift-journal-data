@@ -3,7 +3,7 @@ from lift_journal_data.db.manage import load_lifts
 from tests.db import TestCaseDb
 
 
-class TestUserDAO(TestCaseDb):
+class TestLiftDAO(TestCaseDb):
     def test_get_all(self):
         db_lifts = LiftDAO(self.SessionLocal()).get_all()
         self.assertFalse(db_lifts)

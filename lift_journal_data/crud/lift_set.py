@@ -1,5 +1,7 @@
+import math
+
 from sqlalchemy.exc import IntegrityError, NoResultFound
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query
 
 from lift_journal_data.db.models import LiftSet
 from lift_journal_data.schemas.lift_set import LiftSetBaseSchema
@@ -42,16 +44,23 @@ class LiftSetDAO:
 
         return db_lift_set
 
-    def get_for_user_id(self):
+    def get_for_user_id(self, page: int = 1, page_size: int = 100):
+        if page < 1:
+            raise ValueError("page must be greater than 0")
+
+        limit, offset = self.get_limit_offset(page, page_size)
+
         with self.session:
+            db_lift_sets = self.session.query(LiftSet).filter_by(user_id=self.user_id)
+            db_lift_sets_pages = self.get_pages(db_lift_sets, page_size)
             db_lift_sets = (
-                self.session
-                .query(LiftSet)
-                .filter_by(user_id=self.user_id)
+                db_lift_sets
                 .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
+                .limit(limit)
+                .offset(offset)
             )
 
-        return db_lift_sets
+        return db_lift_sets, db_lift_sets_pages
 
     def delete_for_lift_set_id(self, lift_set_id):
         with self.session:
@@ -64,3 +73,17 @@ class LiftSetDAO:
         self.session.commit()
 
         return True
+
+    @classmethod
+    def get_limit_offset(cls, page: int, page_size: int):
+        limit: int = page_size
+        offset: int = (page - 1) * page_size
+
+        return limit, offset
+
+    @classmethod
+    def get_pages(cls, db_lift_sets: Query, page_size: int):
+        db_lift_sets_count = db_lift_sets.count()
+        pages = math.ceil(db_lift_sets_count / page_size)
+
+        return pages

@@ -88,7 +88,7 @@ class TestLiftSetDAO(TestCaseDb):
                     )
                 )
 
-            db_lift_sets = LiftSetDAO(session, self.db_user.id).get_for_user_id()
+            db_lift_sets, db_lift_sets_count = LiftSetDAO(session, self.db_user.id).get_for_user_id()
 
         self.assertEqual(db_lift_sets.count(), 2)
 
@@ -108,6 +108,37 @@ class TestLiftSetDAO(TestCaseDb):
         self.assertGreater(db_lift_sets[0].date_performed, db_lift_sets[1].date_performed)
         self.assertGreater(db_lift_sets[1].time_performed, db_lift_sets[2].time_performed)
 
+    def test_get_for_user_id_limit_offset(self):
+        with self.SessionLocal() as session:
+            for i in range(11):
+                LiftSetDAO(session, self.db_user.id).create(
+                    LiftSetBaseSchema(
+                        lift_id=self.lift.id,
+                        repetitions=1,
+                        weight=1,
+                        date_performed=datetime.now().date(),
+                        time_performed=(datetime.now() + timedelta(seconds=i)).time(),
+                    )
+                )
+
+        # Correct page count
+        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=1, page_size=2)
+        self.assertEqual(db_lift_sets_pages, 6)
+
+        # Correct results and count
+        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=6, page_size=2)
+        self.assertEqual(db_lift_sets.first().id, 1)
+        self.assertEqual(db_lift_sets.count(), 1)
+
+        # Invalid page value
+        with self.assertRaises(ValueError) as context:
+            LiftSetDAO(session, self.db_user.id).get_for_user_id(page=0)
+            self.assertIn("page must be greater than 0", str(context.exception))
+
+        # Page value too great
+        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=7, page_size=2)
+        self.assertEqual(db_lift_sets.count(), 0)
+
     def test_delete_for_lift_set_id(self):
         with self.SessionLocal() as session:
             lift_set_dao = LiftSetDAO(session, self.db_user.id)
@@ -120,6 +151,8 @@ class TestLiftSetDAO(TestCaseDb):
                     time_performed=datetime.now().time(),
                 )
             )
-            self.assertEqual(lift_set_dao.get_for_user_id().count(), 1)
+            db_lift_sets, db_lift_sets_count = lift_set_dao.get_for_user_id()
+            self.assertEqual(db_lift_sets.count(), 1)
             lift_set_dao.delete_for_lift_set_id(db_lift_set.id)
-            self.assertEqual(lift_set_dao.get_for_user_id().count(), 0)
+            db_lift_sets, db_lift_sets_count = lift_set_dao.get_for_user_id()
+            self.assertEqual(db_lift_sets.count(), 0)
