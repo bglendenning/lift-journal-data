@@ -64,3 +64,5 @@ class LiftSetDAO:
                 return
             else:
                 self.session.commit()
+
+        return True
