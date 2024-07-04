@@ -18,3 +18,6 @@ class LiftSet(Base):
     weight: Mapped[int] = mapped_column(SmallInteger(), nullable=False)
     date_performed: Mapped[date] = mapped_column(Date(), nullable=False)
     time_performed: Mapped[time] = mapped_column(Time(), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"LiftSet(id={self.id!r})"
