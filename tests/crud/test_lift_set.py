@@ -4,7 +4,7 @@ from lift_journal_data.crud.lift_set import LiftSetDAO
 from lift_journal_data.crud.user import UserDAO
 from lift_journal_data.db.manage import load_lifts
 from lift_journal_data.db.models import Lift
-from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetCreateSchema
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema
 from lift_journal_data.schemas.user import UserCreateSchema, UserReadSchema
 from tests.db import TestCaseDb
 
@@ -107,3 +107,19 @@ class TestLiftSetDAO(TestCaseDb):
         self.assertEqual(db_lift_sets.count(), 3)
         self.assertGreater(db_lift_sets[0].date_performed, db_lift_sets[1].date_performed)
         self.assertGreater(db_lift_sets[1].time_performed, db_lift_sets[2].time_performed)
+
+    def test_delete_for_lift_set_id(self):
+        with self.SessionLocal() as session:
+            lift_set_dao = LiftSetDAO(session, self.db_user.id)
+            db_lift_set = lift_set_dao.create(
+                LiftSetBaseSchema(
+                    lift_id=self.lift.id,
+                    repetitions=1,
+                    weight=1,
+                    date_performed=datetime.now().date(),
+                    time_performed=datetime.now().time(),
+                )
+            )
+            self.assertEqual(lift_set_dao.get_for_user_id().count(), 1)
+            lift_set_dao.delete_for_lift_set_id(db_lift_set.id)
+            self.assertEqual(lift_set_dao.get_for_user_id().count(), 0)

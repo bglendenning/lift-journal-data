@@ -55,3 +55,12 @@ class LiftSetDAO:
                 db_lift_sets = None
 
         return db_lift_sets
+
+    def delete_for_lift_set_id(self, lift_set_id):
+        with self.session:
+            try:
+                self.session.query(LiftSet).filter_by(user_id=self.user_id, id=lift_set_id).delete()
+            except NoResultFound:
+                return
+            else:
+                self.session.commit()
