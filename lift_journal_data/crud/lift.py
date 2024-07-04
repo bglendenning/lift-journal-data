@@ -8,6 +8,10 @@ class LiftDAO:
     def __init__(self, session: Session):
         self.session = session
 
+    def get_all(self):
+        with self.session:
+            return self.session.query(Lift).order_by(Lift.name.asc()).all()
+
     def get_for_id(self, lift_id: int):
         with self.session:
             try:
