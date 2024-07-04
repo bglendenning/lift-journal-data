@@ -8,10 +8,10 @@ class LiftDAO:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_for_id(self, id: int):
+    def get_for_id(self, lift_id: int):
         with self.session:
             try:
-                db_lift = self.session.query(Lift).filter_by(id=id).one()
+                db_lift = self.session.query(Lift).filter_by(id=lift_id).one()
             except NoResultFound:
                 db_lift = None
 

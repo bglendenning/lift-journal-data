@@ -19,6 +19,9 @@ class LiftJournalData:
         self.engine = create_engine(self.DB_URL)
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
+    def get_session(self):
+        return self.SessionLocal()
+
 
 class Base(DeclarativeBase):
     pass
