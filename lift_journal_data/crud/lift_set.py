@@ -44,22 +44,19 @@ class LiftSetDAO:
 
     def get_for_user_id(self):
         with self.session:
-            try:
-                db_lift_sets = (
-                    self.session
-                    .query(LiftSet)
-                    .filter_by(user_id=self.user_id)
-                    .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
-                )
-            except NoResultFound:
-                db_lift_sets = None
+            db_lift_sets = (
+                self.session
+                .query(LiftSet)
+                .filter_by(user_id=self.user_id)
+                .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
+            )
 
         return db_lift_sets
 
     def delete_for_lift_set_id(self, lift_set_id):
         with self.session:
             try:
-                self.session.query(LiftSet).filter_by(user_id=self.user_id, id=lift_set_id).delete()
+                self.session.query(LiftSet).filter_by(user_id=self.user_id, id=lift_set_id).one().delete()
             except NoResultFound:
                 return
             else:
