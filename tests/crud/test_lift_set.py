@@ -88,7 +88,7 @@ class TestLiftSetDAO(TestCaseDb):
                     )
                 )
 
-            db_lift_sets, db_lift_sets_count = LiftSetDAO(session, self.db_user.id).get_for_user_id()
+            db_lift_sets, count, pages = LiftSetDAO(session, self.db_user.id).get_for_user_id()
 
         self.assertEqual(db_lift_sets.count(), 2)
 
@@ -122,13 +122,14 @@ class TestLiftSetDAO(TestCaseDb):
                 )
 
         # Correct page count
-        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=1, page_size=2)
-        self.assertEqual(db_lift_sets_pages, 6)
+        db_lift_sets, count, pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=1, page_size=2)
+        self.assertEqual(pages, 6)
 
-        # Correct results and count
-        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=6, page_size=2)
+        # Correct results, results count, and total records count
+        db_lift_sets, count, pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=6, page_size=2)
         self.assertEqual(db_lift_sets.first().id, 1)
         self.assertEqual(db_lift_sets.count(), 1)
+        self.assertEqual(count, 11)
 
         # Invalid page value
         with self.assertRaises(ValueError) as context:
@@ -136,7 +137,7 @@ class TestLiftSetDAO(TestCaseDb):
             self.assertIn("page must be greater than 0", str(context.exception))
 
         # Page value too great
-        db_lift_sets, db_lift_sets_pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=7, page_size=2)
+        db_lift_sets, count, pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=7, page_size=2)
         self.assertEqual(db_lift_sets.count(), 0)
 
     def test_delete_for_lift_set_id(self):
@@ -151,8 +152,8 @@ class TestLiftSetDAO(TestCaseDb):
                     time_performed=datetime.now().time(),
                 )
             )
-            db_lift_sets, db_lift_sets_count = lift_set_dao.get_for_user_id()
+            db_lift_sets, count, pages = lift_set_dao.get_for_user_id()
             self.assertEqual(db_lift_sets.count(), 1)
             lift_set_dao.delete_for_lift_set_id(db_lift_set.id)
-            db_lift_sets, db_lift_sets_count = lift_set_dao.get_for_user_id()
+            db_lift_sets, count, pages = lift_set_dao.get_for_user_id()
             self.assertEqual(db_lift_sets.count(), 0)

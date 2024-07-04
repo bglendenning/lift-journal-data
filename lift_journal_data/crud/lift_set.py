@@ -52,7 +52,7 @@ class LiftSetDAO:
 
         with self.session:
             db_lift_sets = self.session.query(LiftSet).filter_by(user_id=self.user_id)
-            db_lift_sets_pages = self.get_pages(db_lift_sets, page_size)
+            count, pages = self.get_pages(db_lift_sets, page_size)
             db_lift_sets = (
                 db_lift_sets
                 .order_by(LiftSet.date_performed.desc(), LiftSet.time_performed.desc())
@@ -60,7 +60,7 @@ class LiftSetDAO:
                 .offset(offset)
             )
 
-        return db_lift_sets, db_lift_sets_pages
+        return db_lift_sets, count, pages
 
     def delete_for_lift_set_id(self, lift_set_id):
         with self.session:
@@ -83,7 +83,7 @@ class LiftSetDAO:
 
     @classmethod
     def get_pages(cls, db_lift_sets: Query, page_size: int):
-        db_lift_sets_count = db_lift_sets.count()
-        pages = math.ceil(db_lift_sets_count / page_size)
+        count = db_lift_sets.count()
+        pages = math.ceil(count / page_size)
 
-        return pages
+        return count, pages
