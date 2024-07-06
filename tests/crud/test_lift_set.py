@@ -4,7 +4,7 @@ from lift_journal_data.crud.lift_set import LiftSetDAO
 from lift_journal_data.crud.user import UserDAO
 from lift_journal_data.db.manage import load_lifts
 from lift_journal_data.db.models import Lift
-from lift_journal_data.schemas.lift_set import LiftSetBaseSchema
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetUpdateSchema
 from lift_journal_data.schemas.user import UserCreateSchema, UserReadSchema
 from tests.db import TestCaseDb
 
@@ -139,6 +139,47 @@ class TestLiftSetDAO(TestCaseDb):
         # Page value too great
         db_lift_sets, count, pages = LiftSetDAO(session, self.db_user.id).get_for_user_id(page=7, page_size=2)
         self.assertEqual(db_lift_sets.count(), 0)
+
+    def test_update_for_lift_id(self):
+        with self.SessionLocal() as session:
+            date_now = datetime.now()
+            time_now = datetime.now()
+            lift_set_dao = LiftSetDAO(session, self.db_user.id)
+            db_lift_set = lift_set_dao.create(
+                LiftSetBaseSchema(
+                    lift_id=self.lift.id,
+                    repetitions=1,
+                    weight=1,
+                    date_performed=date_now.date(),
+                    time_performed=time_now.time(),
+                )
+            )
+            lift_set = LiftSetUpdateSchema(repetitions=2)
+            rows_updated = lift_set_dao.update_for_lift_set_id(db_lift_set.id, lift_set)
+            lift_set = lift_set_dao.get_for_lift_set_id(db_lift_set.id)
+            # Only repetitions field updated
+            self.assertEqual(rows_updated, 1)
+            self.assertEqual(lift_set.repetitions, 2)
+            self.assertEqual(lift_set.weight, 1)
+            self.assertEqual(lift_set.date_performed, date_now.date())
+            self.assertEqual(lift_set.time_performed, time_now.time())
+
+            update_date_now = (date_now + timedelta(days=1)).date()
+            update_time_now = (time_now + timedelta(seconds=1)).time()
+            lift_set = LiftSetUpdateSchema(
+                repetitions=3,
+                weight=2,
+                date_performed=update_date_now,
+                time_performed=update_time_now,
+            )
+            rows_updated = lift_set_dao.update_for_lift_set_id(db_lift_set.id, lift_set)
+            lift_set = lift_set_dao.get_for_lift_set_id(db_lift_set.id)
+            # All fields updated
+            self.assertEqual(rows_updated, 1)
+            self.assertEqual(lift_set.repetitions, 3)
+            self.assertEqual(lift_set.weight, 2)
+            self.assertEqual(lift_set.date_performed, update_date_now)
+            self.assertEqual(lift_set.time_performed, update_time_now)
 
     def test_delete_for_lift_set_id(self):
         with self.SessionLocal() as session:

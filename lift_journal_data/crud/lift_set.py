@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session, Query
 
 from lift_journal_data.db.models import LiftSet
-from lift_journal_data.schemas.lift_set import LiftSetBaseSchema
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetUpdateSchema
 
 
 class LiftSetDAO:
@@ -13,14 +13,7 @@ class LiftSetDAO:
         self.user_id = user_id
 
     def create(self, lift_set: LiftSetBaseSchema):
-        db_lift_set = LiftSet(
-            user_id=self.user_id,
-            lift_id=lift_set.lift_id,
-            repetitions=lift_set.repetitions,
-            weight=lift_set.weight,
-            date_performed=lift_set.date_performed,
-            time_performed=lift_set.time_performed,
-        )
+        db_lift_set = LiftSet(user_id=self.user_id, **lift_set.model_dump())
 
         with self.session:
             self.session.add(db_lift_set)
@@ -61,6 +54,17 @@ class LiftSetDAO:
             )
 
         return db_lift_sets, count, pages
+
+    def update_for_lift_set_id(self, lift_set_id: int, lift_set: LiftSetUpdateSchema):
+        with self.session:
+            rows_updated = (
+                self.session.query(LiftSet)
+                .filter_by(id=lift_set_id, user_id=self.user_id)
+                .update({key: value for key, value in lift_set.model_dump().items() if value})
+            )
+            self.session.commit()
+
+            return rows_updated
 
     def delete_for_lift_set_id(self, lift_set_id):
         with self.session:

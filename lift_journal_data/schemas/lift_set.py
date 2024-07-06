@@ -1,3 +1,5 @@
+from typing import Optional
+
 from datetime import date, time
 
 from pydantic import BaseModel
@@ -20,3 +22,13 @@ class LiftSetCreateSchema(LiftSetBaseSchema):
 
 class LiftSetReadSchema(LiftSetBaseSchema):
     id: int
+
+
+class LiftSetUpdateSchema(BaseModel):
+    repetitions: Optional[int] = None
+    weight: Optional[int] =  None
+    date_performed: Optional[date] = None
+    time_performed: Optional[time] = None
+
+    class Config:
+        from_attributes = True
