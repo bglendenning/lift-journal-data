@@ -24,6 +24,10 @@ user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_NAME=<database name>
 
 # URL database configuration
 user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
+
+# Create an SQLite database
+# Note the three forward slashes for creating a database in a directory relative to the working directory
+user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=sqlite:///<database filename>
 ```
 
 ## Managing the database
